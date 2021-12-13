@@ -19,19 +19,17 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // 셀레니움
-    implementation 'org.seleniumhq.selenium:selenium-java'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.1'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    runtimeOnly 'com.h2database:h2:2.0.202'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.25'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.1'
     // Jsoup
     implementation 'org.jsoup:jsoup:1.14.3'
     // 스프링 시큐리티
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.6.1'
     // Swagger
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'

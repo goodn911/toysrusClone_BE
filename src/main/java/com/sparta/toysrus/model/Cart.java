@@ -1,5 +1,6 @@
 package com.sparta.toysrus.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Cart {
@@ -15,13 +17,11 @@ public class Cart {
     private Long id;
 
     @OneToOne
-    @Column(name = "userId",nullable = false)
+    @JoinColumn(name = "userId")
     private User user;
 
     @OneToMany
-    @Column(name = "itemId",nullable = false)
+    @JoinColumn(name = "itemId")
     private List<Item> item;
 
-    @Column(nullable = false)
-    private String cartCount;
 }

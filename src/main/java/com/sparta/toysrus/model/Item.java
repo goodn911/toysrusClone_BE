@@ -1,11 +1,15 @@
 package com.sparta.toysrus.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Item {
@@ -32,8 +36,23 @@ public class Item {
     @Column(nullable = false)
     private String description;
 
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private CategoryEnum categoryEnum;
+
+    @ManyToOne
+    private Category category;
+
     @Column(nullable = false)
-    private String clickCount;
+    private Long clickCount;
 
-
+    public Item(String itemName, String thumbnail, String imgDetail, Long price, Long discount, Category category) {
+        this.itemName = itemName;
+        this.thumbnail = thumbnail;
+        this.imgDetail = imgDetail;
+        this.price = price;
+        this.discount = discount;
+        this.category = category;
+        this.clickCount = 0L;
+    }
 }
