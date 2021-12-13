@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Getter
 @NoArgsConstructor
@@ -14,10 +14,9 @@ public class Category {
     @Id
     private Long id;
 
-    @OneToMany
-    @Column(name = "itemId",nullable = false)
-    private List<Item> item;
+    @Column
+    private String name;
 
-    @Column(nullable = false)
-    private String categoryName;
+
+
 }

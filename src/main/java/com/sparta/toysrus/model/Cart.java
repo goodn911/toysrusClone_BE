@@ -15,13 +15,11 @@ public class Cart {
     private Long id;
 
     @OneToOne
-    @Column(name = "userId",nullable = false)
+    @Column(name = "userId",nullable = true)
     private User user;
 
     @OneToMany
-    @Column(name = "itemId",nullable = false)
+    @Column(name = "itemId",nullable = true)
     private List<Item> item;
 
-    @Column(nullable = false)
-    private String cartCount;
 }

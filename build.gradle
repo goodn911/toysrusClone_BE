@@ -26,6 +26,9 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.jsoup:jsoup:1.14.2'
+    implementation 'org.seleniumhq.selenium:selenium-java'
+
 }
 
 test {

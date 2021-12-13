@@ -1,5 +1,6 @@
 package com.sparta.toysrus.model;
 
+import com.sparta.toysrus.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,11 @@ public class User {
     @Column(nullable = false)
     private String address;
 
+    public User(SignupRequestDto requestDto){
+        this.name= requestDto.getName();
+        this.email=requestDto.getUsername()+"@"+requestDto.getDomain();
+        this.password=requestDto.getPassword();
+        this.phone=requestDto.getPhone();
+        this.address=requestDto.getAddress();
+    }
 }
