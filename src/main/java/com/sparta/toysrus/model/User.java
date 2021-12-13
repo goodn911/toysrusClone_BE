@@ -3,10 +3,12 @@ package com.sparta.toysrus.model;
 import com.sparta.toysrus.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 import javax.persistence.*;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @Entity
@@ -19,7 +21,7 @@ public class User {
     private String name;
 
     @Column(nullable = false)
-    private String email;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -32,7 +34,7 @@ public class User {
 
     public User(SignupRequestDto requestDto){
         this.name= requestDto.getName();
-        this.email=requestDto.getUsername()+"@"+requestDto.getDomain();
+        this.username=requestDto.getUsername()+"@"+requestDto.getDomain();
         this.password=requestDto.getPassword();
         this.phone=requestDto.getPhone();
         this.address=requestDto.getAddress();
