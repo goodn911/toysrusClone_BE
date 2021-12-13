@@ -16,7 +16,4 @@ public class Category {
 
     @Column
     private String name;
-
-
-
 }
