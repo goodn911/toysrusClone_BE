@@ -15,11 +15,11 @@ public class Cart {
     private Long id;
 
     @OneToOne
-    @Column(name = "userId",nullable = true)
+    @JoinColumn(name = "userId")
     private User user;
 
     @OneToMany
-    @Column(name = "itemId",nullable = true)
+    @Column(name = "itemId")
     private List<Item> item;
 
 }
