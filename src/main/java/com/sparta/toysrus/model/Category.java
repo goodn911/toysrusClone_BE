@@ -16,4 +16,8 @@ public class Category {
 
     @Column
     private String name;
+
+    public Category(String name) {
+        this.name=name;
+    }
 }

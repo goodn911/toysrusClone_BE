@@ -22,8 +22,8 @@ public class UserService {
     @Transactional
     public String userRegister(SignupRequestDto signupRequestDto) {
 
-        String email = signupRequestDto.getUsername()+"@"+signupRequestDto.getDomain();
-        Optional<User> foundEmail = userRepository.findByUsername(email);
+        String username = signupRequestDto.getUsername()+"@"+signupRequestDto.getDomain();
+        Optional<User> foundEmail = userRepository.findByUsername(username);
         UserValidator.checkEmail(foundEmail);
 
         UserValidator.checkPassword(signupRequestDto);

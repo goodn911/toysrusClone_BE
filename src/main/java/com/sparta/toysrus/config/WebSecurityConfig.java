@@ -56,6 +56,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers("/h2-console/**")
                 .antMatchers("/api/auth/signup")
+                .antMatchers("/api/auth/login")
+                .antMatchers("/api/crawling")
+                .antMatchers("/api/item/**")
+
                 .antMatchers(
                         "/v2/api-docs",
                         "/swagger-resources/**",
@@ -105,7 +109,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/configuration/security",
                         "/health").permitAll()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/auth").permitAll()
                 .antMatchers("/**").permitAll()
+                .antMatchers("/api/crawling").permitAll()
+                .antMatchers("/api/item/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -148,6 +155,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("POST, /api/**");
         skipPathList.add("POST, /api/auth/signup");
         skipPathList.add("POST, /api/auth/login");
+
+        //상품관련 API허용
+        skipPathList.add("POST, /api/crawling");
+        skipPathList.add("POST, /api/item/**");
+        skipPathList.add("GET, /api/item/**");
 
         // Swagger
         skipPathList.add("GET, /swagger-ui.html");
