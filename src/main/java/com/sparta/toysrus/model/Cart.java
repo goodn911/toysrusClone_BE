@@ -14,12 +14,15 @@ public class Cart {
     @Id
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
-    @OneToMany
-    @Column(name = "itemId")
-    private List<Item> item;
+    @ManyToOne
+    @JoinColumn(name = "itemId")
+    private Item item;
+
+    @Column
+    private Long cartCount;
 
 }

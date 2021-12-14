@@ -1,5 +1,6 @@
 package com.sparta.toysrus.config;
 
+import com.google.common.collect.ImmutableList;
 import com.sparta.toysrus.security.FilterSkipMatcher;
 import com.sparta.toysrus.security.FormLoginSuccessHandler;
 import com.sparta.toysrus.security.filter.FormLoginFilter;
@@ -8,6 +9,8 @@ import com.sparta.toysrus.security.jwt.HeaderTokenExtractor;
 import com.sparta.toysrus.security.provider.FormLoginAuthProvider;
 import com.sparta.toysrus.security.provider.JWTAuthProvider;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.filters.CorsFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +23,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -30,11 +34,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
-@EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JWTAuthProvider jwtAuthProvider;
     private final HeaderTokenExtractor headerTokenExtractor;
+//    private final CorsFilter corsFilter;
 
 
     @Bean
@@ -59,7 +63,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/login")
                 .antMatchers("/api/crawling")
                 .antMatchers("/api/item/**")
-
                 .antMatchers(
                         "/v2/api-docs",
                         "/swagger-resources/**",
@@ -76,12 +79,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
-                .csrf()
-                .disable();
+                .csrf().disable()
+                .cors();
+//                .addFilterBefore(corsFilter, SecurityContextPersistenceFilter.class);
         // 아래 코드는 실패해서 삭제하고 위에 and(); 붙여줌
-//        configurationSource(corsConfigurationSource());
+//
 
         // 서버에서 인증은 JWT로 인증하기 때문에 Session의 생성을 막습니다.
         http
@@ -110,7 +112,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/health").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/api/auth").permitAll()
-                .antMatchers("/**").permitAll()
                 .antMatchers("/api/crawling").permitAll()
                 .antMatchers("/api/item/**").permitAll()
                 .anyRequest()
@@ -198,20 +199,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-
-    // CORS 관련 내용 우선 주석처리
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.addExposedHeader("Authorization");
-        configuration.setAllowCredentials(true); // 서버가 응답할 때 json을 자바스크립트에서 처리할 수 있도록 함
-        configuration.addAllowedOriginPattern("/**");
-
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+      // 이 방법이 안돼서 run 파일에다 설정 추가
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration configuration = new CorsConfiguration();
+//
+//        configuration.setAllowedOrigins(ImmutableList.of("*"));
+//        configuration.setAllowedMethods(ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+//        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type"));
+//        configuration.addAllowedHeader("*");
+//        configuration.addExposedHeader("Authorization");
+//        configuration.setAllowCredentials(true); // 서버가 응답할 때 json을 자바스크립트에서 처리할 수 있도록 함
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }

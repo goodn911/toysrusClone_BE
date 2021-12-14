@@ -51,7 +51,4 @@ public class UserValidator {
             throw new IllegalArgumentException("비밀번호에 아이디와 같은 값을 포함할 수 없습니다.");
         }
     }
-
-
-
 }
