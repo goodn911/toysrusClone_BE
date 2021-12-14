@@ -1,14 +1,38 @@
 package com.sparta.toysrus.crawling;
 
+import com.sparta.toysrus.dto.ItemDto;
+import com.sparta.toysrus.model.Category;
+import com.sparta.toysrus.repository.CategoryRepository;
+import com.sparta.toysrus.service.ItemService;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
+
+import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class crawlingJsoupTest {
-    public static void main(String[] args) throws IOException, InterruptedException {
+@RequiredArgsConstructor
+@Component
+public class CrawlingJsoup {
 
-        String url = "http://www.ssg.com/disp/category.ssg?ctgId=6000161290";
+    private final ItemService itemService;
+    private final CategoryRepository categoryRepository;
+
+//    public static void main(String[] args) throws IOException, InterruptedException {
+    @Transactional
+    public void crawlingAdd(String categoryUrl,String categoryName) throws IOException, InterruptedException {
+        //카테고리 먼저저장
+        Category category =new Category(categoryName);
+        categoryRepository.save(category);
+
+        String url = categoryUrl;
+
+
+        List<ItemDto> itemDtoList =new ArrayList<>();
         Document doc = Jsoup.connect(url)
                 .userAgent("Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36")
                 .header("scheme", "https")
@@ -23,7 +47,8 @@ public class crawlingJsoupTest {
         Thread.sleep(1000);
         Elements linkList = doc.select(".cunit_t232 > .cunit_prod > .thmb > a");
 
-        for (int i = 0; i < linkList.size(); i++) {
+
+        for (int i = 0; i < linkList.size()-60; i++) {
             String href = linkList.get(i).attr("href");
             url = "http://www.ssg.com/" + href;
             doc = Jsoup.connect(url)
@@ -39,6 +64,9 @@ public class crawlingJsoupTest {
 
 
             Elements title = doc.select("#content > div.cdtl_cm_detail.ty_ssg.react-area > div.cdtl_row_top > div.cdtl_col_rgt > div.cdtl_prd_info > h2");
+            if(title.isEmpty()){
+                continue;
+            }
             System.out.println("상품명: " + title.text());
 
             Elements thumbnail = doc.select(("#mainImg"));
@@ -62,7 +90,17 @@ public class crawlingJsoupTest {
             System.out.println("============================================================");
 
             Thread.sleep(3500);
+            String title1 =title.text();
+            String thumbnail1 ="http:"+thumbnail.attr("src");
+            String imgDetail1 ="http://www.ssg.com"+imgDetail.attr("src");
+            Long price1 =Long.parseLong((price.text().split(",")[0]+price.text().split(",")[1]));
 
+
+            ItemDto itemDto = new ItemDto(title1,thumbnail1,imgDetail1,price1,category);
+            System.out.println(itemDto.getThumbnail());
+            itemDtoList.add(itemDto);
         }
+
+            itemService.addItem(itemDtoList);
     }
 }

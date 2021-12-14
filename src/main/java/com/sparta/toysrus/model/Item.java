@@ -1,5 +1,6 @@
 package com.sparta.toysrus.model;
 
+import com.sparta.toysrus.dto.ItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,20 +31,35 @@ public class Item {
     @Column(nullable = false)
     private Long price;
 
-    @Column(nullable = false)
+    @Column
     private Long discount;
 
-    @Column(nullable = false)
+    @Column
     private String description;
 
-    @Column(nullable = false)
-    private ShowAreaEum showAreaEum;
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private ShowAreaEnum showAreaEnum;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="categoryId")
     private Category category;
 
-    @Column(nullable = false)
+    @Column
     private Long clickCount;
 
 
+
+
+    public Item(ItemDto itemDto) {
+        this.itemName=itemDto.getItemName();
+        this.thumbnail=itemDto.getThumbnail();
+        this.imgDetail=itemDto.getImgDetail();
+        this.price=itemDto.getPrice();
+        this.category= itemDto.getCategory();
+        this.discount=0L;
+        this.clickCount=0L;
+        this.showAreaEnum = ShowAreaEnum.RECOMMEND;
+
+    }
 }
